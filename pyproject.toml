@@ -1,0 +1,7 @@
+[project]
+name = "chronosapi-fastapi"
+version = "0.1.0"
+description = "Simple yet efficient RESTful application for managing calendar events and conference room availability."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
