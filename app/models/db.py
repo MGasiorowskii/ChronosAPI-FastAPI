@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import AsyncEngine
 
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+from core.config import settings
 
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, connect_args=connect_args)
+engine = AsyncEngine(create_engine(str(settings.DATABASE_URI), echo=True, future=True))

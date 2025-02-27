@@ -3,9 +3,9 @@ from typing import Annotated, Any, Literal
 from pydantic import (
     AnyUrl,
     BeforeValidator,
-    computed_field,
+    computed_field, PostgresDsn,
 )
-# from pydantic_core import MultiHostUrl
+from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -39,17 +39,17 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = ""
     POSTGRES_DB: str = ""
 
-    # @computed_field  # type: ignore[prop-decorator]
-    # @property
-    # def SQLALCHEMY_DATABASE_URI(self) -> MultiHostUrl:
-    #     return MultiHostUrl.build(
-    #         scheme="postgresql+psycopg",
-    #         username=self.POSTGRES_USER,
-    #         password=self.POSTGRES_PASSWORD,
-    #         host=self.POSTGRES_SERVER,
-    #         port=self.POSTGRES_PORT,
-    #         path=self.POSTGRES_DB,
-    #     )
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def DATABASE_URI(self) -> PostgresDsn:
+        return PostgresDsn.build(
+            scheme="postgresql+asyncpg",
+            username=self.POSTGRES_USER,
+            password=self.POSTGRES_PASSWORD,
+            host=self.POSTGRES_SERVER,
+            port=self.POSTGRES_PORT,
+            path=self.POSTGRES_DB,
+        )
 
     FIRST_SUPERUSER: str
     FIRST_SUPERUSER_PASSWORD: str
