@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 class HealthCheckStatus(BaseModel):
     status: Literal["ok", "nok"]
 
+
 @router.get(
     "",
     summary="Perform a Health Check",
@@ -28,12 +29,12 @@ def health_check():
     if _check_db() and _check_cache():
         return JSONResponse(
             status_code=status.HTTP_200_OK,
-            content=HealthCheckStatus(status='ok').model_dump(),
+            content=HealthCheckStatus(status="ok").model_dump(),
         )
 
     return JSONResponse(
         status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-        content=HealthCheckStatus(status='nok').model_dump(),
+        content=HealthCheckStatus(status="nok").model_dump(),
     )
 
 
@@ -45,6 +46,7 @@ def _check_db() -> bool:
     except Exception as e:
         logging.error(f"Database connection failed: {e}")
         return False
+
 
 def _check_cache() -> bool:
     return True

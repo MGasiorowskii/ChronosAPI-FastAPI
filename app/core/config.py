@@ -4,9 +4,9 @@ from pydantic import (
     AnyUrl,
     BeforeValidator,
     computed_field,
-    PostgresDsn, RedisDsn,
+    PostgresDsn,
+    RedisDsn,
 )
-from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -67,7 +67,7 @@ class Settings(BaseSettings):
             host=self.REDIS_HOST,
             port=self.REDIS_PORT,
             password=self.REDIS_PASSWORD,
-            path=f"/{self.REDIS_DB}"
+            path=f"/{self.REDIS_DB}",
         )
 
     FIRST_SUPERUSER: str

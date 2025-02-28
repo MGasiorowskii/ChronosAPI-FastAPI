@@ -36,7 +36,9 @@ class UserCreate(UserBase):
     def hash_password(cls, value: str) -> str:
         if not pwd_context.identify(value):
             if len(value) > cls.MAX_PASSWORD_LENGTH:
-                raise ValidationError(f"Password has to be at most {cls.MAX_PASSWORD_LENGTH} characters long")
+                raise ValidationError(
+                    f"Password has to be at most {cls.MAX_PASSWORD_LENGTH} characters long"
+                )
             return pwd_context.hash(value)
         return value
 

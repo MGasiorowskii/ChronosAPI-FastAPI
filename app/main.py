@@ -1,13 +1,19 @@
+import secrets
+
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
+
 from api.health_check import router as health_check_router
+from api.v1 import urls as v1_urls
 
 from core.config import settings
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
     return f"{route.tags[0]}-{route.name}"
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -24,6 +30,8 @@ if settings.all_cors_origins:
         allow_headers=["*"],
     )
 
+app.add_middleware(SessionMiddleware, secret_key=secrets.token_hex(32))
 
 
 app.include_router(health_check_router)
+app.include_router(v1_urls.router)
