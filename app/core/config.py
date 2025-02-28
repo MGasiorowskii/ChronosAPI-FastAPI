@@ -4,7 +4,7 @@ from pydantic import (
     AnyUrl,
     BeforeValidator,
     computed_field,
-    PostgresDsn,
+    PostgresDsn, RedisDsn,
 )
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -52,6 +52,22 @@ class Settings(BaseSettings):
             host=self.POSTGRES_SERVER,
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
+        )
+
+    REDIS_HOST: str
+    REDIS_PORT: int = 6379
+    REDIS_PASSWORD: str | None = None
+    REDIS_DB: int
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def CACHE_URI(self) -> RedisDsn:
+        return RedisDsn.build(
+            scheme="redis",
+            host=self.REDIS_HOST,
+            port=self.REDIS_PORT,
+            password=self.REDIS_PASSWORD,
+            path=f"/{self.REDIS_DB}"
         )
 
     FIRST_SUPERUSER: str
