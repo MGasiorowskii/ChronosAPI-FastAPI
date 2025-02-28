@@ -38,9 +38,7 @@ async def login(session: SessionDep, credentials: CredentialsBody):
 
     session_id = secrets.token_hex(16)
     cache.set(session_id, str(user.id), ex=CACHE_TTL)
-    response = JSONResponse(
-        content={"message": "Logged in successfully"}
-    )
+    response = JSONResponse(content={"message": "Logged in successfully"})
     response.set_cookie(key="session_id", value=session_id)
     return response
 

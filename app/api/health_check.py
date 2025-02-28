@@ -9,7 +9,7 @@ from sqlmodel import Session, select
 
 from core.db import engine
 
-router = APIRouter(prefix="/health", tags=["health-check"])
+router = APIRouter(prefix="/api", tags=["api"])
 
 
 logging.basicConfig(level=logging.INFO)
@@ -21,11 +21,11 @@ class HealthCheckStatus(BaseModel):
 
 
 @router.get(
-    "",
+    "/health",
     summary="Perform a Health Check",
     response_description="Return HTTP Status Code 200 (OK) or 503 (Service Unavailable)",
 )
-def health_check():
+def health():
     if _check_db() and _check_cache():
         return JSONResponse(
             status_code=status.HTTP_200_OK,

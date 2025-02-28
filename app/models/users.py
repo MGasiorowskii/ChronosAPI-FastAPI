@@ -4,10 +4,12 @@ from typing import ClassVar
 from zoneinfo import available_timezones
 
 from pydantic import EmailStr, field_validator, ValidationError
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 
 from passlib.context import CryptContext
 
+from models.rooms import ConferenceRoom
+from models.events import CalendarEventParticipants, CalendarEvent
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -47,3 +49,10 @@ class UserCreate(UserBase):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     password: str
+
+    managed_rooms: list[ConferenceRoom] = Relationship(back_populates="manager")
+
+    owned_events: list[CalendarEvent] = Relationship(back_populates="owner")
+    participating_events: list[CalendarEvent] = Relationship(
+        back_populates="participants", link_model=CalendarEventParticipants
+    )
