@@ -3,7 +3,8 @@ from typing import Annotated, Any, Literal
 from pydantic import (
     AnyUrl,
     BeforeValidator,
-    computed_field, PostgresDsn,
+    computed_field,
+    PostgresDsn,
 )
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -25,7 +26,9 @@ class Settings(BaseSettings):
     )
     API_V1_STR: str = "/api/v1"
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
-    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = []
+    BACKEND_CORS_ORIGINS: Annotated[
+        list[AnyUrl] | str, BeforeValidator(parse_cors)
+    ] = []
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -43,7 +46,7 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URI(self) -> PostgresDsn:
         return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
+            scheme="postgresql+psycopg2",
             username=self.POSTGRES_USER,
             password=self.POSTGRES_PASSWORD,
             host=self.POSTGRES_SERVER,
