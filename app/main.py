@@ -1,9 +1,7 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
+from api.health_check import router as health_check_router
 
 from core.config import settings
 
@@ -28,6 +26,4 @@ if settings.all_cors_origins:
 
 
 
-@app.get("/health", tags=["root"])
-def health_check():
-    return JSONResponse(status_code=200, content={"status": "healthy"})
+app.include_router(health_check_router)
