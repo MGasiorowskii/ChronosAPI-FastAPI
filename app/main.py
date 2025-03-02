@@ -35,3 +35,12 @@ app.add_middleware(SessionMiddleware, secret_key=secrets.token_hex(32))
 
 app.include_router(health_check_router)
 app.include_router(v1_urls.router)
+
+
+if settings.ENVIRONMENT != "prod":
+    from core.db import engine
+    from sqladmin import Admin
+    from api.admin import generate_admin_views
+
+    admin = Admin(app, engine)
+    generate_admin_views(admin)

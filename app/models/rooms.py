@@ -12,3 +12,4 @@ class ConferenceRoom(SQLModel, table=True):
         default=None, foreign_key="user.id", ondelete="SET NULL"
     )
     manager: "User" = Relationship(back_populates="managed_rooms")
+    events: list["CalendarEvent"] = Relationship(back_populates="location")
